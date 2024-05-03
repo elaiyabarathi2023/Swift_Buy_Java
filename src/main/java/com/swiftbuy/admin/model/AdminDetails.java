@@ -1,4 +1,4 @@
-package com.example.demo.admin.model;
+package com.swiftbuy.admin.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

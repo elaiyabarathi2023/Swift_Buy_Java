@@ -1,7 +1,9 @@
 package com.swiftbuy.user.model;
 
+import java.util.Date;
 import java.util.List;
 
+import com.swiftbuy.admin.model.AdminDetails;
 import com.swiftbuy.admin.model.ProductDetails;
 
 import jakarta.persistence.CascadeType;
@@ -10,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +43,11 @@ public class UserDetails {
  
     private String phoneNumber;
 	@OneToMany(mappedBy = "userdetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	
 	private List<ProductDetails> productdetails;
+	@ManyToOne(cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
+	private AdminDetails admindetails;
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -82,6 +89,10 @@ public class UserDetails {
 	}
 	public void setProductdetails(List<ProductDetails> productdetails) {
 		this.productdetails = productdetails;
+	}
+	public void setCreatedAt(Date date) {
+		// TODO Auto-generated method stub
+		
 	}
  
 

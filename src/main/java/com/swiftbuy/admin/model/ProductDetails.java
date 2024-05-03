@@ -1,5 +1,7 @@
 package com.swiftbuy.admin.model;
 
+import com.swiftbuy.user.model.UserDetails;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,9 +39,19 @@ public class ProductDetails {
     @NotNull(message = "Product stock is mandatory")
     private Integer productStock;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	private UserDetails userdetails;
     // Getters and Setters
 
-    public Long getProductId() {
+    public UserDetails getUserdetails() {
+		return userdetails;
+	}
+
+	public void setUserdetails(UserDetails userdetails) {
+		this.userdetails = userdetails;
+	}
+
+	public Long getProductId() {
         return productId;
     }
 

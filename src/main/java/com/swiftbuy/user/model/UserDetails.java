@@ -1,5 +1,6 @@
 package com.swiftbuy.user.model;
 
+<<<<<<< Updated upstream
 import java.util.List;
 
 import com.swiftbuy.admin.model.ProductDetails;
@@ -11,6 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+=======
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+>>>>>>> Stashed changes
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,21 +34,33 @@ public class UserDetails {
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters long")
     private String username;
 
+<<<<<<< Updated upstream
   
     private String password;
 
  
+=======
+   
+    private String password;
+
+  
+>>>>>>> Stashed changes
     private String email;
 
     @NotBlank(message = "Name should not be blank")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters long")
     private String name;
 
+<<<<<<< Updated upstream
  
     private String phoneNumber;
 	@OneToMany(mappedBy = "userdetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ProductDetails> productdetails;
  
+=======
+  
+    private String phoneNumber;
+>>>>>>> Stashed changes
 
     // Getters and Setters
 
@@ -49,6 +68,7 @@ public class UserDetails {
         return userId;
     }
 
+<<<<<<< Updated upstream
     public List<ProductDetails> getProductdetails() {
 		return productdetails;
 	}
@@ -58,6 +78,9 @@ public class UserDetails {
 	}
 
 	public void setUserId(Long userId) {
+=======
+    public void setUserId(Long userId) {
+>>>>>>> Stashed changes
         this.userId = userId;
     }
 
@@ -93,7 +116,13 @@ public class UserDetails {
         this.name = name;
     }
 
+<<<<<<< Updated upstream
 
+=======
+  
+
+  
+>>>>>>> Stashed changes
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -102,5 +131,10 @@ public class UserDetails {
         this.phoneNumber = phoneNumber;
     }
 
+<<<<<<< Updated upstream
    
 }
+=======
+    
+}
+>>>>>>> Stashed changes

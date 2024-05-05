@@ -29,6 +29,7 @@ public class JwtGenerator implements TokenGenerator {
 	}
 	
 	@Override
+<<<<<<< Updated upstream
 	public Map<String, String> generateToken(UserDetails userdata)throws InvalidKeyException {
 		   Map<String, String> jwtTokenGen = new HashMap<>();
 		Map<String, String> claims = new HashMap<>();
@@ -66,4 +67,40 @@ public class JwtGenerator implements TokenGenerator {
 	  	  byte[] keyBytes = Decoders.BASE64.decode("5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437");
 	  	  return Keys.hmacShaKeyFor(keyBytes);
 		}
+=======
+	public Map<String, String> generateToken(UserDetails userdata) {
+        Map<String, String> jwtTokenGen = new HashMap<>();
+        Map<String, String> claims = new HashMap<>();
+
+        claims.put("firstname", userdata.getFirstname());
+        if (userdata.getEmail() != null && !userdata.getEmail().isEmpty()) {
+            claims.put("email", userdata.getEmail());
+        }
+        if (userdata.getPhoneNumber() != null && !userdata.getPhoneNumber().isEmpty()) {
+            claims.put("phoneNumber", userdata.getPhoneNumber());
+        }
+        claims.put("userId", userdata.getUserId().toString());
+
+        Date expiration = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30));
+
+        String token = Jwts.builder()
+                .claims(claims)
+                .subject(userdata.getUserId().toString())
+                .issuer("swiftbuy")
+                .signWith(getSigningKey())
+                .issuedAt(new Date())
+                .expiration(expiration)
+                .compact();
+
+        jwtTokenGen.put("token", token);
+        jwtTokenGen.put("message", "Token generated successfully");
+
+        return jwtTokenGen;
+    }
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode("5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437");
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+>>>>>>> Stashed changes
 }

@@ -3,6 +3,8 @@ package com.swiftbuy.admin.service;
 import com.swiftbuy.admin.model.AdminDetails;
 import com.swiftbuy.admin.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+<<<<<<< Updated upstream
 
     
+=======
+    
+    //@Autowired
+>>>>>>> Stashed changes
     private PasswordEncoder passwordEncoder;
+   
 
     @Override
     public boolean authenticateAdmin(String username, String password) {

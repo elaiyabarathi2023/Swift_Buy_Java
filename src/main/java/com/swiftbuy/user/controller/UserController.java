@@ -5,11 +5,16 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.swiftbuy.admin.model.ProductDetails;
+import com.swiftbuy.product.service.ProductService;
 import com.swiftbuy.user.model.UserDetails;
 import com.swiftbuy.user.service.UserService;
 
@@ -19,7 +24,10 @@ import jakarta.validation.Valid;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
+    private ProductService productService;
+	
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
@@ -52,6 +60,58 @@ public class UserController {
 		return new ResponseEntity<>(loggedInUser, HttpStatus.CREATED);
 	}
 	
-	
+	@GetMapping("/products/{productId}")
+	public ResponseEntity<ProductDetails> getUserProduct(@PathVariable Long productId) {
+	    ProductDetails product = productService.getProduct(productId);
+	    return ResponseEntity.ok(product);
+	}
+
+	@GetMapping("/product-descriptions/{descriptionId}")
+	public ResponseEntity<ProductDetails> getUserProductDescription(@PathVariable Long descriptionId) {
+	    ProductDetails productDescription = productService.getProductDescription(descriptionId);
+	    return ResponseEntity.ok(productDescription);
+	}
+
+	@GetMapping("/product-images/{imageId}")
+	public ResponseEntity<ProductDetails> getUserProductImage(@PathVariable Long imageId) {
+	    ProductDetails productImage = productService.getProductImage(imageId);
+	    return ResponseEntity.ok(productImage);
+	}
+
+	@PostMapping("/product-quantities")
+	public ResponseEntity<ProductDetails> createUserProductQuantity(@RequestBody ProductDetails productQuantity) {
+	    ProductDetails createdQuantity = productService.createProductQuantity(productQuantity);
+	    return new ResponseEntity<>(createdQuantity, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/product-quantities/{quantityId}")
+	public ResponseEntity<ProductDetails> getUserProductQuantity(@PathVariable Long quantityId) {
+	    ProductDetails productQuantity = productService.getProductQuantity(quantityId);
+	    return ResponseEntity.ok(productQuantity);
+	}
+
+	@PutMapping("/product-quantities/{quantityId}")
+	public ResponseEntity<ProductDetails> updateUserProductQuantity(@PathVariable Long quantityId, @RequestBody ProductDetails productQuantity) {
+	    ProductDetails updatedQuantity = productService.updateProductQuantity(quantityId, productQuantity);
+	    return ResponseEntity.ok(updatedQuantity);
+	}
+
+	@GetMapping("/estimated-deliveries/{deliveryId}")
+	public ResponseEntity<ProductDetails> getUserEstimatedDelivery(@PathVariable Long deliveryId) {
+	    ProductDetails estimatedDelivery = productService.getEstimatedDelivery(deliveryId);
+	    return ResponseEntity.ok(estimatedDelivery);
+	}
+
+	@GetMapping("/product-offers/{offerId}")
+	public ResponseEntity<ProductDetails> getUserProductOffer(@PathVariable Long offerId) {
+	    ProductDetails productOffer = productService.getProductOffer(offerId);
+	    return ResponseEntity.ok(productOffer);
+	}
+
+	@GetMapping("/cancelled-products/{productId}")
+	public ResponseEntity<ProductDetails> getUserCancelledProduct(@PathVariable Long productId) {
+	    ProductDetails cancelledProduct = productService.getCancelledProduct(productId);
+	    return ResponseEntity.ok(cancelledProduct);
+	}
 	
 }

@@ -15,6 +15,16 @@ public class ProductDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
+    public enum ProductStatus {
+        ACTIVE,
+        INACTIVE,
+        DISCONTINUED
+    }
+    
+	@Enumerated(EnumType.STRING)
+    @NotNull(message = "Product status is mandatory")
+    private ProductStatus productStatus;
+    
     @NotBlank(message = "Product name is mandatory")
     @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     private String productName;
@@ -32,6 +42,8 @@ public class ProductDetails {
     private Integer productQuantity;
 
     private String productOffers;
+    private String cancellationReason;
+
 
     @NotBlank(message = "Estimated delivery is mandatory")
     private String estimatedDelivery;
@@ -42,7 +54,15 @@ public class ProductDetails {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	private UserDetails userdetails;
     // Getters and Setters
+    
+    public ProductStatus getProductStatus() {
+		return productStatus;
+	}
 
+	public void setProductStatus(ProductStatus productStatus) {
+		this.productStatus = productStatus;
+	}
+    
     public UserDetails getUserdetails() {
 		return userdetails;
 	}
@@ -127,6 +147,13 @@ public class ProductDetails {
     public void setProductStock(Integer productStock) {
         this.productStock = productStock;
     }
+    public String getCancellationReason() {
+        return cancellationReason;
+    }
+
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
     public Long getCatId() {
         return catId;
     }
@@ -142,4 +169,7 @@ public class ProductDetails {
     public void setSubCatId(Long subCatId) {
         this.subCatId = subCatId;
     }
+    @ManyToOne
+    @JoinColumn(name="fk_prod_id", nullable=false)
+    private SubCategory subcategory;
 }

@@ -6,7 +6,9 @@ package com.swiftbuy.admin.service.CustomerServiceQuestionsAnswer;
 
 
 import com.swiftbuy.admin.model.CustomerServiceQuestionsAnswer.CustomerServiceQuestionsAnswer;
+import com.swiftbuy.admin.model.CustomerServiceSubCategory.CustomerServiceSubCategory;
 import com.swiftbuy.admin.repository.CustomerServiceQuestionsAnswer.CustomerServiceQuestionsAnswerRepo;
+import com.swiftbuy.admin.repository.CustomerServiceSubCategory.CustomerServiceSubCategoryRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class CustomerServiceQuestionsAnswerService {
 
     @Autowired
     private CustomerServiceQuestionsAnswerRepo customerServiceQuestionsAnswerRepository;
+    
+    @Autowired
+    CustomerServiceSubCategoryRepo customerServiceSubCategoryRepository;
 
     public List<CustomerServiceQuestionsAnswer> getAllCustomerServiceQuestionsAnswers() {
         return customerServiceQuestionsAnswerRepository.findAll();
@@ -28,7 +33,18 @@ public class CustomerServiceQuestionsAnswerService {
                 .orElseThrow();
     }
 
+//    public CustomerServiceQuestionsAnswer createCustomerServiceQuestionsAnswer(CustomerServiceQuestionsAnswer customerServiceQuestionsAnswer) {
+//    	
+//    	
+//        return customerServiceQuestionsAnswerRepository.save(customerServiceQuestionsAnswer);
+//    }
+    
     public CustomerServiceQuestionsAnswer createCustomerServiceQuestionsAnswer(CustomerServiceQuestionsAnswer customerServiceQuestionsAnswer) {
+        Long subCategoryId = customerServiceQuestionsAnswer.getSubCategory().getId();
+        CustomerServiceSubCategory subCategory = customerServiceSubCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new RuntimeException("Sub Category not found with id " + subCategoryId));
+
+        customerServiceQuestionsAnswer.setSubCategory(subCategory);
         return customerServiceQuestionsAnswerRepository.save(customerServiceQuestionsAnswer);
     }
 

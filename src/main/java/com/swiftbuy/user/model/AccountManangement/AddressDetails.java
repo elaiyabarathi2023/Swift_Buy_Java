@@ -52,7 +52,7 @@ public class AddressDetails {
     @NotNull(message = "Country cannot be null")
     private String country;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = false)
     private UserDetails user;
 

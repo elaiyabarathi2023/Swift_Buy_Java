@@ -4,6 +4,7 @@ package com.swiftbuy.admin.service.CustomerServiceCategory;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 public class CustomerServiceCategoryService {
+	@Autowired
     private final CustomerServiceCategoryRepo customerServiceCategoryRepository;
 
     @Autowired
@@ -22,7 +24,7 @@ public class CustomerServiceCategoryService {
     }
 
     public List<CustomerServiceCategory> getAllCategories() {
-        return customerServiceCategoryRepository.findAll();
+        return (List<CustomerServiceCategory>) customerServiceCategoryRepository.findAll();
     }
 
     public CustomerServiceCategory getCategoryById(Long id) {

@@ -23,7 +23,7 @@ public class CategoryService {
     public Category updateCategory(Long categoryId, Category category) {
         Category existingCategory = getCategoryById(categoryId);
         if (existingCategory != null) {
-            category.setId(categoryId);
+            category.setCategory_id(categoryId);
             return categoryRepository.save(category);
         }
         return null;

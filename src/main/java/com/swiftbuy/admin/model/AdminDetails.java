@@ -43,8 +43,8 @@ public class AdminDetails {
 
     // Getters and Setters
 
-    @OneToMany(mappedBy = "admindetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   	private List<UserDetails> userdetails;
+//    @OneToMany(mappedBy = "admindetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//   	private List<UserDetails> userdetails;
     public Long getUserId() {
         return userId;
     }

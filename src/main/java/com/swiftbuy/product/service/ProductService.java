@@ -2,6 +2,9 @@ package com.swiftbuy.product.service;
 
 import com.swiftbuy.admin.model.*;
 import com.swiftbuy.product.repository.ProductRepository;
+import com.swiftbuy.repository.CategoryRepository;
+import com.swiftbuy.subcrepository.SubCategoryRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -11,9 +14,37 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+     private CategoryRepository   categoryRepository;
+    
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
 
     // Product methods
+//    public ProductDetails createProduct(ProductDetails product) {
+//    	
+//        return productRepository.save(product);
+//    }
+    
+//    public ProductDetails createProduct(ProductDetails product) {
+//    	 Long subCategoryId = product.getSubcategory().getId();
+//
+//    	    SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
+//    	            .orElseThrow(() -> new RuntimeException("Sub Category not found with id " + subCategoryId));
+//
+//    	    product.setSubcategory(subCategory);
+//
+//    	    return productRepository.save(product);
+//    }
+    
+   
     public ProductDetails createProduct(ProductDetails product) {
+    	Long subCategoryId = product.getSubcategory().getId();
+        SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new RuntimeException("Sub Category not found with id " + subCategoryId ));
+        
+        product.setSubcategory(subCategory);
+
         return productRepository.save(product);
     }
 
@@ -32,8 +63,6 @@ public class ProductService {
         existingProduct.setProductOffers(product.getProductOffers());
         existingProduct.setEstimatedDelivery(product.getEstimatedDelivery());
         existingProduct.setProductStock(product.getProductStock());
-        existingProduct.setCatId(product.getCatId());
-        existingProduct.setSubCatId(product.getSubCatId());
         return productRepository.save(existingProduct);
     }
 

@@ -44,9 +44,9 @@ public class UserDetails {
     private String phoneNumber;
 	@OneToMany(mappedBy = "userdetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	
-	private List<ProductDetails> productdetails;
-	@ManyToOne(cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
-	private AdminDetails admindetails;
+//	private List<ProductDetails> productdetails;
+//	@ManyToOne(cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
+	//private AdminDetails admindetails;
 	
 	public Long getUserId() {
 		return userId;
@@ -84,12 +84,12 @@ public class UserDetails {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public List<ProductDetails> getProductdetails() {
-		return productdetails;
-	}
-	public void setProductdetails(List<ProductDetails> productdetails) {
-		this.productdetails = productdetails;
-	}
+//	public List<ProductDetails> getProductdetails() {
+//		return productdetails;
+//	}
+//	public void setProductdetails(List<ProductDetails> productdetails) {
+//		this.productdetails = productdetails;
+//	}
 	public void setCreatedAt(Date date) {
 		// TODO Auto-generated method stub
 		

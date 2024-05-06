@@ -9,12 +9,16 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 @Configuration
 @SecurityScheme(   name = "Bearer Authentication",   type = SecuritySchemeType.HTTP,   bearerFormat = "JWT",   scheme = "bearer" )
-public class FilterConfig {
+public class FilterConfigAdmin {
     @Bean
     public FilterRegistrationBean jwtFilter() {
         FilterRegistrationBean filter= new FilterRegistrationBean();
-        filter.setFilter(new jwtFilter( ));
-//       filter.addUrlPatterns("/api/addresses");
+
+     filter.addUrlPatterns("/api/addresses");
+
+        filter.setFilter(new jwtFilterAdmin( ));
+       filter.addUrlPatterns("/phone/*","/person/*","/department/*");
+
      
      
 

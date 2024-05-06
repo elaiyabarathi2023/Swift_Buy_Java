@@ -18,7 +18,7 @@ public class CustomerServiceSubCategory {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CustomerServiceCategory category;
 

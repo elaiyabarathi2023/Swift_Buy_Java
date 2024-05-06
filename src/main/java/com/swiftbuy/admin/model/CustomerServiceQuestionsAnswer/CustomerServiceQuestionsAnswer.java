@@ -18,7 +18,7 @@ public class CustomerServiceQuestionsAnswer {
     @Column(nullable = false)
     private String answer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
     @JoinColumn(name = "sub_category_id", nullable = false)
     private CustomerServiceSubCategory subCategory;
 

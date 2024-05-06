@@ -3,9 +3,10 @@
 
 package com.swiftbuy.user.controller.AccountManangement;
 
-import com.swiftbuy.user.model.AccountManangement.AddressDetails;
-import com.swiftbuy.user.service.AccountManangement.AddressDetailsServiceImpl;
 
+
+import com.swiftbuy.user.model.AccountManangement.AddressDetails;
+import com.swiftbuy.user.service.AccountManangement.AddressDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,41 +19,35 @@ import java.util.List;
 public class AddressDetailsController {
 
     @Autowired
-    private AddressDetailsServiceImpl addressDetailsService;
+    private AddressDetailsService addressDetailsService;
 
     @GetMapping
-    public ResponseEntity<Iterable<AddressDetails>> getAllAddresses() {
-        Iterable<AddressDetails> addresses = addressDetailsService.getAllAddresses();
-        return ResponseEntity.ok(addresses);
+    public ResponseEntity<List<AddressDetails>> getAllAddressDetails() {
+        List<AddressDetails> addressDetails = addressDetailsService.getAllAddressDetails();
+        return ResponseEntity.ok(addressDetails);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AddressDetails> getAddressById(@PathVariable Long id) {
-        AddressDetails address = addressDetailsService.getAddressById(id);
-        return address != null ? ResponseEntity.ok(address) : ResponseEntity.notFound().build();
+    public ResponseEntity<AddressDetails> getAddressDetailsById(@PathVariable Long id) {
+        AddressDetails addressDetails = addressDetailsService.getAddressDetailsById(id);
+        return ResponseEntity.ok(addressDetails);
     }
 
     @PostMapping
-    public ResponseEntity<AddressDetails> saveAddress(@RequestBody AddressDetails address) {
-        AddressDetails savedAddress = addressDetailsService.saveAddress(address);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
+    public ResponseEntity<AddressDetails> createAddressDetails(@RequestBody AddressDetails addressDetails) {
+        AddressDetails createdAddressDetails = addressDetailsService.createAddressDetails(addressDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAddressDetails);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressDetails> updateAddressDetails(@PathVariable Long id, @RequestBody AddressDetails addressDetails) {
+        AddressDetails updatedAddressDetails = addressDetailsService.updateAddressDetails(id, addressDetails);
+        return ResponseEntity.ok(updatedAddressDetails);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
-        addressDetailsService.deleteAddress(id);
+    public ResponseEntity<Void> deleteAddressDetails(@PathVariable Long id) {
+        addressDetailsService.deleteAddressDetails(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/addressType/{addressType}")
-    public ResponseEntity<List<AddressDetails>> findByAddressType(@PathVariable String addressType) {
-        List<AddressDetails> addresses = addressDetailsService.findByAddressType(addressType);
-        return ResponseEntity.ok(addresses);
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<AddressDetails>> findByUserUserId(@PathVariable Long userId) {
-        List<AddressDetails> addresses = addressDetailsService.findByUserUserId(userId);
-        return ResponseEntity.ok(addresses);
     }
 }

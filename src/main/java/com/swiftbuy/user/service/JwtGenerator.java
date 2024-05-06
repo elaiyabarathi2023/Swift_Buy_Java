@@ -10,7 +10,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.swiftbuy.user.config.TokenGenerator;
+import com.swiftbuy.user.config.TokenGeneratorAdmin;
 import com.swiftbuy.user.model.UserDetails;
 import com.swiftbuy.user.repository.UserRepository;
 
@@ -19,7 +19,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.InvalidKeyException;
 import io.jsonwebtoken.security.Keys;
 @Service
-public class JwtGenerator implements TokenGenerator {
+public class JwtGenerator implements TokenGeneratorAdmin {
 	@Autowired
 	private UserRepository userRepository;
 

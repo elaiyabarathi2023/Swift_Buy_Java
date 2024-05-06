@@ -10,23 +10,21 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.swiftbuy.admin.config.TokenGenerator;
 import com.swiftbuy.admin.model.AdminDetails;
 import com.swiftbuy.admin.repository.AdminRepository;
-import com.swiftbuy.admin.config.TokenGenerator;
-import com.swiftbuy.user.model.UserDetails;
-import com.swiftbuy.user.repository.UserRepository;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.InvalidKeyException;
 import io.jsonwebtoken.security.Keys;
 @Service
-public class JwtGenerator implements TokenGenerator {
+public class JwtGenerator1 implements TokenGenerator {
 	@Autowired
 	private AdminRepository adminRepository;
 
 	
-	public JwtGenerator(AdminRepository adminRepository) {
+	public JwtGenerator1(AdminRepository adminRepository) {
 		this.adminRepository = adminRepository;
 	}
 	

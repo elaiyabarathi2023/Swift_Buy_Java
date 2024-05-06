@@ -16,7 +16,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
-public class TokenService {
+public class TokenServiceAdmin {
 	@Autowired
 	UserRepository userRepository;
 	private SecretKey getSigningKey() throws Exception {

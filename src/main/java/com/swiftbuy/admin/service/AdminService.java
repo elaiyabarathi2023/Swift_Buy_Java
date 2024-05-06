@@ -1,10 +1,6 @@
 package com.swiftbuy.admin.service;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.swiftbuy.admin.model.AdminDetails;
 import com.swiftbuy.admin.repository.AdminRepository;
-import com.swiftbuy.user.model.UserDetails;
-import com.swiftbuy.user.repository.UserRepository;
 
 @Service
 public class AdminService {
@@ -22,7 +16,7 @@ public class AdminService {
     private AdminRepository adminRepository;
 
     @Autowired
-    private JwtGenerator jwtGenerator;
+    private JwtGenerator1 jwtGenerator1;
 
     public Map<String, String> signupUser(AdminDetails userdata) {
         Map<String, String> response = new HashMap<>();
@@ -33,7 +27,7 @@ public class AdminService {
         AdminDetails savedUser = adminRepository.save(userdata);
 
         // Generate a token for the user
-        Map<String, String> tokenResponse = jwtGenerator.generateToken(savedUser);
+        Map<String, String> tokenResponse = jwtGenerator1.generateToken(savedUser);
         response.putAll(tokenResponse);
 
         return response;
@@ -48,7 +42,7 @@ public class AdminService {
         // Check if the user exists
         if (user != null) {
             // Generate a token for the user
-            Map<String, String> tokenResponse = jwtGenerator.generateToken(user);
+            Map<String, String> tokenResponse = jwtGenerator1.generateToken(user);
             response.putAll(tokenResponse);
         } else {
             response.put("message", "Invalid username");
@@ -68,7 +62,7 @@ public class AdminService {
         }
 
         // Try to find the user by email
-        AdminDetails user = adminRepository.findByEmail(username);
+        AdminDetails user = adminRepository.findByUsername(username);
 
         // Check if the user exists
         if (user != null) {
@@ -77,7 +71,7 @@ public class AdminService {
             AdminDetails updatedUser = adminRepository.save(user);
 
             // Generate a new token for the user
-            Map<String, String> tokenResponse = jwtGenerator.generateToken(updatedUser);
+            Map<String, String> tokenResponse = jwtGenerator1.generateToken(updatedUser);
 
             // Add the token to the response
             response.putAll(tokenResponse);

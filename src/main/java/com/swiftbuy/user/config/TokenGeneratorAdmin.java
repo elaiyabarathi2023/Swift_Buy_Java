@@ -7,7 +7,7 @@ import com.swiftbuy.user.model.UserDetails;
 
 import io.jsonwebtoken.security.InvalidKeyException;
 
-public interface TokenGenerator {
+public interface TokenGeneratorAdmin {
 Map<String,String>generateToken(UserDetails user);
 
 

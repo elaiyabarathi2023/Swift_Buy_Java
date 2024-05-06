@@ -13,14 +13,14 @@ import jakarta.validation.constraints.NotNull;
 public class AddressDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
 
     
     @NotNull(message = "Address type cannot be null")
-    @ValidAddressType
+//    @ValidAddressType
     private String addressType;
     
     

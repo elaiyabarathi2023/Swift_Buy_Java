@@ -1,5 +1,6 @@
 package com.swiftbuy.Testcases;
 
+import org.hamcrest.Matchers;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -127,7 +128,39 @@ public class UserAuthenticationTesting {
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
 
 	}
+	@Test
+	public void forgotPassword_ResponseOk() throws Exception {
+	    JSONObject json = new JSONObject();
+	    json.put("email", "sheena23@gmail.com");
+	    json.put("newPassword", "Rs7x@123");
 	
+
+	    String user = json.toString();
+
+	    mockMvc.perform(
+	            MockMvcRequestBuilders.post("/user/forgot-password")
+	                    .contentType(MediaType.APPLICATION_JSON)
+	                    .content(user))
+	            .andExpect(MockMvcResultMatchers.status().isCreated())
+	            .andReturn();
+	}
+
+	@Test
+	public void forgotPassword_InvalidEmail() throws Exception {
+	    JSONObject json = new JSONObject();
+	    json.put("email", "sheena1223@gmail.com"); 
+	    json.put("newPassword", "Rs7x@123");
+	   // Assuming this email does not exist in the database
+
+	    String user = json.toString();
+
+	    mockMvc.perform(
+	            MockMvcRequestBuilders.post("/user/forgot-password")
+	                    .contentType(MediaType.APPLICATION_JSON)
+	                    .content(user))
+	            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+	            .andReturn();
+	}
 //
 //	@Test
 //	public void Invalid_User_Login() throws Exception {

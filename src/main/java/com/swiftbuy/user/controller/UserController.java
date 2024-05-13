@@ -1,5 +1,6 @@
 package com.swiftbuy.user.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,9 +76,8 @@ public class UserController {
 	public Iterable<UserDetails> getAllUsers() {
 	    return userRepository.findAll();
 	}
-
-
-	@GetMapping("/product-images/{imageId}")
+	
+    @GetMapping("/product-images/{imageId}")
 	public ResponseEntity<ProductDetails> getUserProductImage(@PathVariable Long imageId) {
 	    ProductDetails productImage = productService.getProductImage(imageId);
 	    return ResponseEntity.ok(productImage);
@@ -113,13 +113,10 @@ public class UserController {
 	    return ResponseEntity.ok(productOffer);
 	}
 
-	@GetMapping("/cancelled-products/{productId}")
-	public ResponseEntity<ProductDetails> getUserCancelledProduct(@PathVariable Long productId) {
-	    ProductDetails cancelledProduct = productService.getCancelledProduct(productId);
-	    return ResponseEntity.ok(cancelledProduct);
-	}
+
 	
 }
+
 
 
 

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "ProductDetails1")
+@Table(name = "ProductDetails2")
 public class ProductDetails {
 
 	@Id
@@ -16,14 +16,6 @@ public class ProductDetails {
 	public enum ProductStatus {
 		ACTIVE, INACTIVE, DISCONTINUED
 	}
-
-	public enum ProductStock {
-		IN_STOCK, OUT_OF_STOCK, LOW_STOCK
-	}
-
-	@Enumerated(EnumType.STRING)
-	@NotNull(message = "Product stock is mandatory")
-	private ProductStock productStock;
 
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Product status is mandatory")
@@ -46,7 +38,11 @@ public class ProductDetails {
 	private Integer productQuantity;
 
 	private String productOffers;
-	private String cancellationReason;
+
+	private String availableStocks;
+	
+	private double overallRating;
+
 
 	@NotBlank(message = "Estimated delivery is mandatory")
 	private String estimatedDelivery;
@@ -57,6 +53,18 @@ public class ProductDetails {
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "subcategory_id", nullable = false)
 	private SubCategory subcategory;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "category_id", nullable = false)
+	private Category category;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -122,14 +130,6 @@ public class ProductDetails {
 		this.productOffers = productOffers;
 	}
 
-	public String getCancellationReason() {
-		return cancellationReason;
-	}
-
-	public void setCancellationReason(String cancellationReason) {
-		this.cancellationReason = cancellationReason;
-	}
-
 	public String getEstimatedDelivery() {
 		return estimatedDelivery;
 	}
@@ -138,20 +138,26 @@ public class ProductDetails {
 		this.estimatedDelivery = estimatedDelivery;
 	}
 
-	public ProductStock getProductStock() {
-		return productStock;
-	}
-
-	public void setProductStock(ProductStock productStock) {
-		this.productStock = productStock;
-	}
-
 	public SubCategory getSubcategory() {
 		return subcategory;
 	}
 
 	public void setSubcategory(SubCategory subcategory) {
 		this.subcategory = subcategory;
+	}
+	public double getOverallRating() {
+		return overallRating;
+	}
+
+	public void setOverallRating(double overallRating) {
+		this.overallRating = overallRating;
+	}
+	public String getAvailableStocks() {
+		return availableStocks;
+	}
+
+	public void setAvailableStocks(String availableStocks) {
+		this.availableStocks = availableStocks;
 	}
 
 }

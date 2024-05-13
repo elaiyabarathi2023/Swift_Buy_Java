@@ -14,5 +14,5 @@ import com.swiftbuy.admin.model.CustomerServiceCategory.CustomerServiceCategory;
 
 @Repository
 public interface CustomerServiceCategoryRepo extends CrudRepository<CustomerServiceCategory, Long> {
-    CustomerServiceCategory findByName(String name);
+    
 }

@@ -14,7 +14,7 @@ public class FilterConfigAdmin {
     public FilterRegistrationBean jwtFilter() {
         FilterRegistrationBean filter= new FilterRegistrationBean();
 
-     filter.addUrlPatterns("/api/addresses");
+//     filter.addUrlPatterns("/api/addresses");
 
         filter.setFilter(new jwtFilterAdmin( ));
        filter.addUrlPatterns("/phone/*","/person/*","/department/*");

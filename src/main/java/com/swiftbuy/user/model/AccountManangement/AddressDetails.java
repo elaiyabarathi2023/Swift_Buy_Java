@@ -2,9 +2,11 @@ package com.swiftbuy.user.model.AccountManangement;
 
 
 
+import com.swiftbuy.CustomValidator.UserCustomValidator.AccountMangement.ValidAddressType;
 import com.swiftbuy.user.model.UserDetails;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "addresses")
@@ -14,38 +16,45 @@ public class AddressDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+
+
+    
+    @NotNull(message = "Address type cannot be null")
+//    @ValidAddressType
     private String addressType;
     
-    @Column(nullable = false)
+    
+    @NotNull(message = "Permanent address cannot be null")
     private String permanentAddress;
     
-    @Column(nullable = false)
+   
+    @NotNull(message = "Current address cannot be null")
     private String currentAddress;
     
 
-    @Column(nullable = false)
+
+    @NotNull(message = "Street address cannot be null")
     private String streetAddress;
 
-    @Column(nullable = false)
+ 
+    @NotNull(message = "City cannot be null")
     private String city;
 
-    @Column(nullable = false)
+    
+    @NotNull(message = "State cannot be null")
     private String state;
 
-    @Column(nullable = false)
+    
+    @NotNull(message = "Zip code cannot be null")
     private String zipCode;
 
-    @Column(nullable = false)
+   
+    @NotNull(message = "Country cannot be null")
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId", nullable = false)
     private UserDetails user;
-
-    
-
-    // Getters and Setters
 
     public Long getId() {
         return id;

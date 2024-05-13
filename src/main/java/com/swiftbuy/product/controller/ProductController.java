@@ -3,6 +3,8 @@ package com.swiftbuy.product.controller;
 import com.swiftbuy.admin.model.*;
 import com.swiftbuy.product.service.ProductService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,12 @@ public class ProductController {
     private ProductService productService;
 
     // Product API calls
+    
+//    @GetMapping("/allproducts")
+//    public ResponseEntity<Iterable<ProductDetails>> getAllProductsForAdmin() {
+//        Iterable<ProductDetails> products = productService.getAllProducts();
+//        return ResponseEntity.ok(products);
+//    }
     @PostMapping("/products")
     public ResponseEntity<ProductDetails> createProduct(@RequestBody ProductDetails product) {
         ProductDetails createdProduct = productService.createProduct(product);
@@ -170,28 +178,5 @@ public class ProductController {
         productService.deleteProductOffer(offerId);
         return ResponseEntity.noContent().build();
     }
- // Cancelled Product API calls
-    @PostMapping("/cancelled-products")
-    public ResponseEntity<ProductDetails> createCancelledProduct(@RequestBody ProductDetails cancelledProduct) {
-    	ProductDetails createdProduct = productService.createCancelledProduct(cancelledProduct);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/cancelled-products/{productId}")
-    public ResponseEntity<ProductDetails> getCancelledProduct(@PathVariable Long productId) {
-    	ProductDetails cancelledProduct = productService.getCancelledProduct(productId);
-        return ResponseEntity.ok(cancelledProduct);
-    }
-
-    @PutMapping("/cancelled-products/{productId}")
-    public ResponseEntity<ProductDetails> updateCancelledProduct(@PathVariable Long productId, @RequestBody ProductDetails cancelledProduct) {
-    	ProductDetails updatedProduct = productService.updateCancelledProduct(productId, cancelledProduct);
-        return ResponseEntity.ok(updatedProduct);
-    }
-
-    @DeleteMapping("/cancelled-products/{productId}")
-    public ResponseEntity<Void> deleteCancelledProduct(@PathVariable Long productId) {
-        productService.deleteCancelledProduct(productId);
-        return ResponseEntity.noContent().build();
-    }
+ 
 }

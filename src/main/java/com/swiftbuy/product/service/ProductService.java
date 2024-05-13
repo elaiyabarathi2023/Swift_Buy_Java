@@ -5,6 +5,8 @@ import com.swiftbuy.product.repository.ProductRepository;
 import com.swiftbuy.repository.CategoryRepository;
 import com.swiftbuy.subcrepository.SubCategoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,39 +16,45 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-     private CategoryRepository   categoryRepository;
     
     @Autowired
     private SubCategoryRepository subCategoryRepository;
-
-    // Product methods
-//    public ProductDetails createProduct(ProductDetails product) {
-//    	
-//        return productRepository.save(product);
-//    }
     
-//    public ProductDetails createProduct(ProductDetails product) {
-//    	 Long subCategoryId = product.getSubcategory().getId();
-//
-//    	    SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
-//    	            .orElseThrow(() -> new RuntimeException("Sub Category not found with id " + subCategoryId));
-//
-//    	    product.setSubcategory(subCategory);
-//
-//    	    return productRepository.save(product);
-//    }
-    
+    @Autowired
+    private CategoryRepository categoryRepository;
    
     public ProductDetails createProduct(ProductDetails product) {
     	Long subCategoryId = product.getSubcategory().getId();
         SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
                 .orElseThrow(() -> new RuntimeException("Sub Category not found with id " + subCategoryId ));
         
-        product.setSubcategory(subCategory);
+        Long categoryId = product.getCategory().getCategory_id();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found with id " + categoryId));
 
+        
+        product.setSubcategory(subCategory);
+        product.setCategory(category);
         return productRepository.save(product);
     }
+   
+    public Iterable<ProductDetails> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+//    public List<ProductDetails> getAllActiveProducts() {
+//        return productRepository.findByProductStatus(ProductStatus.ACTIVE);
+//    }
+    
+    public ProductDetails getProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+    }
+    public ProductDetails saveProduct(ProductDetails product) {
+        return productRepository.save(product);
+    }
+    
+    
 
     public ProductDetails getProduct(Long productId) {
         return productRepository.findById(productId)
@@ -62,7 +70,7 @@ public class ProductService {
         existingProduct.setProductQuantity(product.getProductQuantity());
         existingProduct.setProductOffers(product.getProductOffers());
         existingProduct.setEstimatedDelivery(product.getEstimatedDelivery());
-        existingProduct.setProductStock(product.getProductStock());
+        
         return productRepository.save(existingProduct);
     }
 
@@ -177,23 +185,5 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    // Cancelled Product methods (no separate entity, part of ProductDetails)
-    public ProductDetails createCancelledProduct(ProductDetails productDetails) {
-        return productRepository.save(productDetails);
-    }
-
-    public ProductDetails getCancelledProduct(Long productId) {
-        return getProduct(productId);
-    }
-
-    public ProductDetails updateCancelledProduct(Long productId, ProductDetails productDetails) {
-        ProductDetails existingProduct = getProduct(productId);
-        existingProduct.setCancellationReason(productDetails.getCancellationReason());
-        return productRepository.save(existingProduct);
-    }
-
-    public void deleteCancelledProduct(Long productId) {
-        ProductDetails product = getProduct(productId);
-        productRepository.delete(product);
-    }
+   
 }

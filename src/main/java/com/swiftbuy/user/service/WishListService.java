@@ -44,9 +44,9 @@ public class WishListService {
 
     private ProductRepository productRepository;
 
-    public WishList addToWishlist(WishList wishlist) {
+    public WishList addToWishlist(WishList wishlist, Long userId) {
 
-        Long userId = wishlist.getUser().getUserId();
+         userId = wishlist.getUser().getUserId();
 
         Long productId = wishlist.getProduct().getProductId();
 

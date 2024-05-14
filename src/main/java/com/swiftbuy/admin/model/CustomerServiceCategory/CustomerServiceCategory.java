@@ -8,6 +8,14 @@ import java.util.List;
 
 import com.swiftbuy.admin.model.CustomerServiceSubCategory.CustomerServiceSubCategory;
 
+
+//postman Query:
+//{
+//    "name": "New SubCategory Nssmsm,ame fm,eiemxmx,mc,m",
+//    "description": "Description dkldljkdxsm,sd,mds,m of the new SubCategory",
+//    "customerservicesubcategory": {
+//        "id": 6
+//    }}
 @Entity
 @Table(name = "customer_service_categories_final")
 public class CustomerServiceCategory {

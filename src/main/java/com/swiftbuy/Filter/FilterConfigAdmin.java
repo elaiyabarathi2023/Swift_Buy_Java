@@ -17,7 +17,9 @@ public class FilterConfigAdmin {
 //     filter.addUrlPatterns("/api/addresses");
 
         filter.setFilter(new jwtFilterAdmin( ));
-       filter.addUrlPatterns("/phone/*","/person/*","/department/*");
+//       filter.addUrlPatterns("/phone/*","/person/*","/department/*");
+        
+        filter.addUrlPatterns("/api/wishlist/add*");
 
      
      

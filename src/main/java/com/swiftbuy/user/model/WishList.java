@@ -4,7 +4,20 @@ package com.swiftbuy.user.model;
 
  
  
- 
+// postman Query:
+// {    "user": {
+//     "userId": 1
+//     // Add other user details if necessary
+// },
+// "product": {
+//     "productId": 1
+// }
+// 
+//}
+
+
+
+
  
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -10,6 +10,16 @@ import com.swiftbuy.admin.model.CustomerServiceCategory.CustomerServiceCategory;
 import com.swiftbuy.admin.model.CustomerServiceQuestionsAnswer.CustomerServiceQuestionsAnswer;
 import jakarta.persistence.*;
 
+
+//Postman Query:
+//	
+//{
+//    "name": "New SubCategorymnd,md,mksal Name",
+//    "description": "Descriptionkdjkkdd of the new SubCategory",
+//    "questionanswer": {
+//        "questionsanswersid": 2
+//    }
+//}
 @Entity
 @Table(name = "customer_service_sub_categories_final")
 public class CustomerServiceSubCategory {

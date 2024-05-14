@@ -1,7 +1,5 @@
 package com.swiftbuy.user.controller;
 
- 
- 
 import java.util.List;
 import java.util.Optional;
  
@@ -19,6 +17,8 @@ import com.swiftbuy.user.model.WishList;
  
 import com.swiftbuy.user.service.WishListService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 
 @RequestMapping("api/wishlist")
@@ -31,11 +31,16 @@ public class WishListController {
 
     @PostMapping("/add")
 
-    public ResponseEntity<WishList> addToWishlist(@RequestBody WishList wishlist) {
+    public ResponseEntity<WishList> addToWishlist(@RequestBody WishList wishlist,HttpServletRequest request) {
 
         try {
+        	 Long userId = (Long) request.getAttribute("userId");
+             // Check if userId is null
+             if (userId == null) {
+                 throw new IllegalArgumentException("User ID cannot be null");
+             }
 
-            WishList addedWishlist = wishlistService.addToWishlist(wishlist);
+            WishList addedWishlist = wishlistService.addToWishlist(wishlist,userId);
 
             return ResponseEntity.ok(addedWishlist);
 

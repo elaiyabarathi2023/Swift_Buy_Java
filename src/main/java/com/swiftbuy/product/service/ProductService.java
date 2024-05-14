@@ -1,3 +1,4 @@
+
 package com.swiftbuy.product.service;
 
 import com.swiftbuy.admin.model.*;
@@ -161,23 +162,5 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    // Cancelled Product methods (no separate entity, part of ProductDetails)
-    public ProductDetails createCancelledProduct(ProductDetails ProductDetails) {
-        return productRepository.save(ProductDetails);
-    }
-
-    public ProductDetails getCancelledProduct(Long productId) {
-        return getProduct(productId);
-    }
-
-    public ProductDetails updateCancelledProduct(Long productId, ProductDetails ProductDetails) {
-        ProductDetails existingProduct = getProduct(productId);
-        existingProduct.setCancellationReason(ProductDetails.getCancellationReason());
-        return productRepository.save(existingProduct);
-    }
-
-    public void deleteCancelledProduct(Long productId) {
-        ProductDetails product = getProduct(productId);
-        productRepository.delete(product);
-    }
+   
 }

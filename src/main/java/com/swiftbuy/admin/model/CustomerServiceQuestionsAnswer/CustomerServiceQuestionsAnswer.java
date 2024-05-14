@@ -5,6 +5,13 @@ import com.swiftbuy.admin.model.CustomerServiceSubCategory.CustomerServiceSubCat
  
 import jakarta.persistence.*;
  
+
+//Postman Query:
+//	
+//{
+//    "question": "How can I trsjkkxkjacksjkjksjksuiijksdkjkjx my ksiurrwnbnmxkjxj skkd?",
+//    "answer": "You can track your xkn,xm,mx osm,jxhjhjxmx rder xklkjxjknxnxm,by logging into your account and visiting the order trackidjkskjdjkwxkkxng section."
+//}
 @Entity
 
 @Table(name = "customer_service_questions_answers_finalise")

@@ -1,155 +1,142 @@
-
 package com.swiftbuy.user.service;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
- 
+
 import com.swiftbuy.admin.model.CouponCodes;
-import com.swiftbuy.admin.model.ProductCouponRequest;
 import com.swiftbuy.admin.model.ProductDetails;
+import com.swiftbuy.admin.model.ShoppingCartRequest;
 import com.swiftbuy.admin.repository.CouponCodeRepository;
 import com.swiftbuy.product.repository.ProductRepository;
 import com.swiftbuy.user.model.ShoppingCart;
 import com.swiftbuy.user.model.UserDetails;
+import com.swiftbuy.user.model.AccountManangement.AddressDetails;
 import com.swiftbuy.user.repository.ShoppingCartRepository;
 import com.swiftbuy.user.repository.UserRepository;
- 
+import com.swiftbuy.user.repository.AccountManangement.AddressDetailsRepo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ShoppingCartService {
-    
+
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
- 
+
     @Autowired
     private ProductRepository productRepository;
-    
+
+    @Autowired
+    private CouponCodeRepository couponCodeRepository;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private CouponCodeRepository couponRepository;
-    Double totalPrice = 0.0;
-    public List<ShoppingCart> saveShoppingCarts(List<ShoppingCart> shoppingCarts, Long userId) {
-        UserDetails user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    private AddressDetailsRepo addressDetailsRepository;
 
-        for (ShoppingCart shoppingCart : shoppingCarts) {
-            Long productId = shoppingCart.getProduct().getProductId();
-            ProductDetails productDetails = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
-            shoppingCart.setProduct(productDetails);
-            shoppingCart.setUser(user);
+    public double calculateTotalPrice(List<ShoppingCart> cartItems) {
+        double totalPrice = 0.0;
 
-            // Save the shopping cart
-            shoppingCartRepository.save(shoppingCart);
-        }
-        return shoppingCarts;
-    }
- 
-    public Double getTotalPrice(List<ShoppingCart> shoppingCarts) {
-     
-
-        // Create a set to store unique products
-        Set<ProductDetails> uniqueProducts = new HashSet<>();
-
-        for (ShoppingCart item : shoppingCarts) {
-            ProductDetails product = item.getProduct();
-
-            // Check if the product is already in the set
-            if (uniqueProducts.contains(product)) {
-                // If the product is already in the set, skip it
-                continue;
-            }
-
-            // Add the product to the set
-            uniqueProducts.add(product);
-
-            Double productPrice = product.getProductPrice();
-            int quantity = 0;
-            Double couponDiscount = 0.0;
-
-            // Iterate over the shopping cart items for the current product
-            for (ShoppingCart cartItem : shoppingCarts) {
-                if (cartItem.getProduct().equals(product)) {
-                    quantity += cartItem.getQuantity();
-
-                    // Check if a coupon is applied
-                    Long selectedCouponId = cartItem.getSelectedCouponId();
-                    if (selectedCouponId != null) {
-                        // Check if the product has a ProductCouponRequest
-                       ProductCouponRequest productCouponRequest = cartItem.getProductCouponRequest();
-                        if (productCouponRequest != null) {
-                            // Get the list of coupon IDs from the ProductCouponRequest
-                            List<Long> couponIds = productCouponRequest.getCouponIds();
-
-                            // Check if the selected coupon ID is present in the list
-                            if (couponIds.contains(selectedCouponId)) {
-                                CouponCodes selectedCoupon = fetchCouponCodes(Arrays.asList(selectedCouponId)).get(0);
-                                couponDiscount = calculateCouponDiscount(selectedCoupon, productPrice);
-                                // Break the loop as we only want to apply one coupon per product
-                                break;
-                            }
-                        }
-                    }
+        for (ShoppingCart item : cartItems) {
+            double itemPrice = item.getProduct().getProductPrice() * item.getQuantity();
+            if (item.getSelectedCouponId() != null) {
+                CouponCodes itemCoupon = item.getProduct().getCoupons().stream()
+                        .filter(coupon -> coupon.getCouponId().equals(item.getSelectedCouponId()))
+                        .findFirst()
+                        .orElse(null);
+                if (itemCoupon != null) {
+                	
+                    double discount = item.getProduct().getProductPrice() * itemCoupon.getDiscountPercentage() / 100;
+                    itemPrice -= discount;
                 }
             }
-
-            Double priceAfterDiscount = productPrice - couponDiscount;
-            totalPrice += (priceAfterDiscount * quantity);
+            totalPrice += itemPrice;
+           
         }
-
         return totalPrice;
     }
- 
-    private List<CouponCodes> fetchCouponCodes(List<Long> couponIds) {
-        // Fetch coupon codes from the database using the provided coupon IDs
-        List<CouponCodes> couponCodes = new ArrayList<>();
-        for (Long couponId : couponIds) {
-            CouponCodes couponCode = couponRepository.findById(couponId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coupon code not found"));
-            couponCodes.add(couponCode);
+
+    public ShoppingCart addToCart(ShoppingCartRequest cartrequest, Long userId) {
+    	
+        // Retrieve the product from the database
+        ProductDetails product = productRepository.findById(cartrequest.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        // Check if the selected coupon ID is valid for the product
+        CouponCodes selectedCoupon = null;
+        if (cartrequest.getSelectedCouponId() != null) {
+            selectedCoupon = product.getCoupons().stream()
+                    .filter(coupon -> coupon.getCouponId().equals(cartrequest.getSelectedCouponId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Selected coupon is not valid for this product"));
         }
-        return couponCodes;
-    }
- 
-    private Double calculateCouponDiscount(CouponCodes couponCode, Double productPrice) {
-      
-        double discountPercentage = couponCode.getDiscountPercentage();
-        return productPrice * (discountPercentage / 100);
-    }
- 
- 
-//    public Iterable<ShoppingCart> getShoppingCartItemsByUserId(Long userId) {
-//        return shoppingCartRepository.findByUserUserId(userId);
-//    }
-    public void updateProductQuantities(List<ShoppingCart> shoppingCarts) {
-        for (ShoppingCart shoppingCart : shoppingCarts) {
-            ProductDetails product = shoppingCart.getProduct();
-            int quantityToSubtract = shoppingCart.getQuantity();
-            
-            // Update the product quantity in the database
-            product.setProductQuantity(product.getProductQuantity()- quantityToSubtract);
-            productRepository.save(product);
+
+        // Retrieve the user from the database
+        UserDetails user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // Retrieve the address from the database
+        AddressDetails address = addressDetailsRepository.findById(cartrequest.getAddressId())
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+
+        // Retrieve the existing cart item
+        Optional<ShoppingCart> cartItemOptional = shoppingCartRepository.findByUserUserIdAndProductProductId(userId, cartrequest.getProductId());
+        ShoppingCart cartItem;
+        if (cartItemOptional.isPresent()) {
+            cartItem = cartItemOptional.get();
+        } else {
+            cartItem = new ShoppingCart();
+            cartItem.setProduct(product);
+            cartItem.setUser(user);
         }
+
+        // If the updated quantity is 0, remove the product from the cart
+        if (cartrequest.getQuantity() == 0) {
+            shoppingCartRepository.delete(cartItem);
+            return null; // or return a suitable response indicating the product was removed
+        }
+
+        // Check if the updated quantity is more than the available product quantity
+        if (cartrequest.getQuantity() > product.getProductQuantity()) {
+            throw new IllegalArgumentException("{\"message\": \"Can't add anymore products\"}");
+        }
+
+        // Update the cart item
+        cartItem.setAddress(address);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(cartrequest.getQuantity());
+        cartItem.setUser(user);
+        cartItem.setSelectedCouponId(cartrequest.getSelectedCouponId());
+
+     // Save the cart item
+        ShoppingCart savedCartItem = shoppingCartRepository.save(cartItem);
+
+        // Calculate the total price for all cart items of the user
+        List<ShoppingCart> cartItems = shoppingCartRepository.findByUserUserId(userId);
+        double totalPrice = calculateTotalPrice(cartItems);
+        System.out.println(totalPrice);
+
+        return savedCartItem;
     }
 
-    public void resetTotalPrice() {
-        totalPrice = 0.0;
-    }
-    
-  
-    public Iterable<ShoppingCart> getAllShoppingCartItemsByUserId(Long userId) {
-        return shoppingCartRepository.findByUserUserId(userId);
-    }
-    public void deleteShoppingCartItem(Long cartItemId) {
-        shoppingCartRepository.deleteById(cartItemId);
-    }
-}
+
+
+   
  
+    
+    public List<ShoppingCart> getCartUserId(Long userId) {
+        Optional<UserDetails> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return shoppingCartRepository.findByUser(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+    }
+ 
+ 
+}

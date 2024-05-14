@@ -2,6 +2,7 @@ package com.swiftbuy.user.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.swiftbuy.CustomValidations.PasswordValidations;
 import com.swiftbuy.CustomValidations.ValidEmail;
 import com.swiftbuy.CustomValidations.ValidPhone;
@@ -13,6 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -39,17 +42,17 @@ public class UserDetails {
  
 @ValidPhone
     private String phoneNumber;
-
-//@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//private ShoppingCart shoppingCart;
+@OneToOne(cascade=CascadeType.REFRESH)
+@JsonIgnore
+private ShoppingCart shoppingCart;
 	
-//	
-//	public ShoppingCart getShoppingCart() {
-//	return shoppingCart;
-//}
-//public void setShoppingCart(ShoppingCart shoppingCart) {
-//	this.shoppingCart = shoppingCart;
-//}
+	
+	public ShoppingCart getShoppingCart() {
+	return shoppingCart;
+}
+public void setShoppingCart(ShoppingCart shoppingCart) {
+	this.shoppingCart = shoppingCart;
+}
 	public Long getUserId() {
 		return userId;
 	}

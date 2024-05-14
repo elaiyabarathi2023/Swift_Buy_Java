@@ -2,7 +2,7 @@ package com.swiftbuy.admin.model;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="coupons")
-@JsonIgnoreProperties(value = {"products"})
+
 public class CouponCodes {
 
     @Id
@@ -23,6 +23,7 @@ public class CouponCodes {
     private Long couponId;
 
     @ManyToMany(mappedBy = "coupons")
+    @JsonIgnore
     private Set<ProductDetails> products;
 
     private String name;

@@ -2,6 +2,8 @@ package com.swiftbuy.user.model.AccountManangement;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.swiftbuy.user.model.ShoppingCart;
 import com.swiftbuy.user.model.UserDetails;
 
 import jakarta.persistence.*;
@@ -13,8 +15,19 @@ public class AddressDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @OneToOne(cascade=CascadeType.REFRESH)
+    @JsonIgnore
+    private ShoppingCart shoppingCart;
 
-    @Column(nullable = false)
+    public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+
+	@Column(nullable = false)
     private String addressType;
     
     @Column(nullable = false)
@@ -39,7 +52,7 @@ public class AddressDetails {
     @Column(nullable = false)
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserDetails user;
 

@@ -1,10 +1,17 @@
 package com.swiftbuy.user.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.swiftbuy.admin.model.ProductCouponRequest;
 import com.swiftbuy.admin.model.ProductDetails;
-import jakarta.persistence.*;
+import com.swiftbuy.user.model.AccountManangement.AddressDetails;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cart")
@@ -19,21 +26,25 @@ public class ShoppingCart {
     private ProductDetails product;
 
     private int quantity;
-
     @ManyToOne(fetch = FetchType.EAGER)
+    private AddressDetails address;
+
+    public AddressDetails getAddress() {
+		return address;
+	}
+
+	public void setAddress(AddressDetails address) {
+		this.address = address;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties(value = {"shoppingCarts"})
     private UserDetails user;
 
     private Long selectedCouponId;
 
-    // Add a reference to ProductCouponRequest
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @JoinColumn(name = "product_coupon_request_id", nullable = true)
-    private ProductCouponRequest productCouponRequest;
-
-    // Getters and Setters
+    // Getters and setters
 
     public Long getSelectedCouponId() {
         return selectedCouponId;
@@ -43,44 +54,37 @@ public class ShoppingCart {
         this.selectedCouponId = selectedCouponId;
     }
 
-    public UserDetails getUser() {
-        return user;
-    }
+	public Long getCartItemId() {
+		return cartItemId;
+	}
 
-    public void setUser(UserDetails user) {
-        this.user = user;
-    }
+	public void setCartItemId(Long cartItemId) {
+		this.cartItemId = cartItemId;
+	}
 
-    public Long getCartItemId() {
-        return cartItemId;
-    }
+	public ProductDetails getProduct() {
+		return product;
+	}
 
-    public void setCartItemId(Long cartItemId) {
-        this.cartItemId = cartItemId;
-    }
+	public void setProduct(ProductDetails product) {
+		this.product = product;
+	}
 
-    public ProductDetails getProduct() {
-        return product;
-    }
+	public int getQuantity() {
+		return quantity;
+	}
 
-    public void setProduct(ProductDetails product) {
-        this.product = product;
-    }
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
-    public int getQuantity() {
-        return quantity;
-    }
+	public UserDetails getUser() {
+		return user;
+	}
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+	public void setUser(UserDetails user) {
+		this.user = user;
+	}
 
-    // Getter and setter for ProductCouponRequest
-    public ProductCouponRequest getProductCouponRequest() {
-        return productCouponRequest;
-    }
-
-    public void setProductCouponRequest(ProductCouponRequest productCouponRequest) {
-        this.productCouponRequest = productCouponRequest;
-    }
+    // Other getters and setters
 }

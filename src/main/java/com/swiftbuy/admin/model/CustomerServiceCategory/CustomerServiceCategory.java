@@ -37,7 +37,6 @@ public class CustomerServiceCategory {
     private CustomerServiceSubCategory customerservicesubcategory;
 
 
-
 	public Long getId() {
 		return id;
 	}

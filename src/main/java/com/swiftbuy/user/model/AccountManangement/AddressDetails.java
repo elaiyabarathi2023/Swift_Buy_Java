@@ -70,15 +70,26 @@ public class AddressDetails {
     @Column(nullable = false)
     private String country;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserDetails user;
-
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private UserDetails user;
+//    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
     
-
+    
+    
     // Getters and Setters
 
-    public Long getId() {
+    public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -153,11 +164,11 @@ public class AddressDetails {
     }
 
 
-    public UserDetails getUser() {
-        return user;
-    }
-
-    public void setUser(UserDetails user) {
-        this.user = user;
-    }
+//    public UserDetails getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(UserDetails user) {
+//        this.user = user;
+//    }
 }

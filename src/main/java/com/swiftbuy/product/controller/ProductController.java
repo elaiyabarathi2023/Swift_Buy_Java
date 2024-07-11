@@ -1,11 +1,22 @@
 package com.swiftbuy.product.controller;
 
 import com.swiftbuy.admin.model.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.swiftbuy.product.service.ProductService;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -177,6 +188,12 @@ public class ProductController {
     public ResponseEntity<Void> deleteProductOffer(@PathVariable Long offerId) {
         productService.deleteProductOffer(offerId);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/search")
+    public Page<ProductDetails> searchProducts(@RequestParam("term") String searchTerm,
+                                               @PageableDefault(sort = "productName", direction = Sort.Direction.ASC) Pageable pageable) {
+        return productService.searchProductsByName(searchTerm, pageable);
     }
  
 }

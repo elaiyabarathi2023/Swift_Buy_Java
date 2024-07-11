@@ -61,12 +61,14 @@ public class CustomerServiceCategoryService {
         return null;
     }
 
-    public void deleteCustomerServiceCategory(Long id) {
+    public boolean deleteCustomerServiceCategory(Long id) {
         Optional<CustomerServiceCategory> optionalCustomerServiceCategory = customerServiceCategoryRepo.findById(id);
         if (optionalCustomerServiceCategory.isPresent()) {
             CustomerServiceCategory customerServiceCategory = optionalCustomerServiceCategory.get();
             customerServiceCategoryRepo.delete(customerServiceCategory);
+            return true;
         }
+        return false;
     }
 
     

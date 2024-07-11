@@ -2,7 +2,7 @@ package com.swiftbuy.user.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -46,21 +46,15 @@ public class WishListService {
 
     public WishList addToWishlist(WishList wishlist, Long userId) {
 
-         userId = wishlist.getUser().getUserId();
+    	  // Retrieve the user from the database
+        UserDetails user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Long productId = wishlist.getProduct().getProductId();
 
-        // Find user by ID
+        
 
-        Optional<UserDetails> userFromDB = userRepository.findById(userId);
-
-        if (userFromDB.isEmpty()) {
-
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-
-        }
-
-        wishlist.setUser(userFromDB.get());
+        wishlist.setUser(user);
 
         // Find product by ID
 
@@ -81,6 +75,8 @@ public class WishListService {
     }
 
     public WishList getWishListById(Long wishlistId) {
+    	
+    	
 
         Optional<WishList> wishlistItem = wishlistRepository.findById(wishlistId);
 
@@ -125,7 +121,6 @@ public class WishListService {
         }
 
     }
- 
     }
 
 

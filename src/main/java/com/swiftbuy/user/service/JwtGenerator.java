@@ -41,22 +41,16 @@ public class JwtGenerator implements TokenGeneratorAdmin {
 		    }
 		claims.put("userId", userdata.getUserId().toString());
 		userdata.setCreatedAt(new Date());
-       UserDetails savedUser = userRepository.save(userdata);
-        
+       UserDetails savedUser = userRepository.save(userdata);        
         Date expiration = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30));
   		 String token = null;
-  		//try {
 				token = Jwts.builder().claims(claims).subject(userdata.getUserId().toString()) // Use user ID instead of password
  
 						.issuer("theertha")
 						.signWith(getSigningKey())
 						.issuedAt(new Date()).expiration(expiration)
 						.compact();
-			//} catch (InvalidKeyException e) {
-				
-		//	} catch (Exception e) {
-			//	e.printStackTrace();
-		//	}
+			
   		jwtTokenGen.put("token", token);
   		jwtTokenGen.put("message","Token generated successfully");
 	    return jwtTokenGen;

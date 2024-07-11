@@ -14,16 +14,7 @@ public class FilterConfigUser {
         FilterRegistrationBean filter= new FilterRegistrationBean();
 
         filter.setFilter(new jwtFilterUser());
-      filter.addUrlPatterns("/api/shoppingcart/add","/api/shoppingcart/cart");
-
-      
-
-        
-        filter.addUrlPatterns("/api/wishlist/add*");
-
-
-     
-     
+      filter.addUrlPatterns("/api/shoppingcart/add","/api/shoppingcart/cart","/api/wishlist/add?","/api/wishlistuser/*","/api/addresses");
 
     return filter;
     }

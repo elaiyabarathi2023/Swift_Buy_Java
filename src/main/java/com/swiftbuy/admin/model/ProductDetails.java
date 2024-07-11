@@ -75,6 +75,8 @@ public class ProductDetails {
 
     @NotNull(message = "Product stock is mandatory")
     private Integer productStock;
+    
+    
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "subcategory_id", nullable = false)

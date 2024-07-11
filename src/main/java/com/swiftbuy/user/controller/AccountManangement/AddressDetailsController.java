@@ -67,8 +67,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/addresses")
@@ -80,20 +82,25 @@ public class AddressDetailsController {
     private AddressDetailsService addressDetailsService;
 
     @PostMapping
-    public ResponseEntity<AddressDetails> createAddressDetails(@RequestBody AddressDetails addressDetails) {
+    public ResponseEntity<AddressDetails> createAddressDetails(@RequestBody AddressDetails addressDetails,HttpServletRequest request) {
         AddressDetails createdAddressDetails;
         try {
-            createdAddressDetails = addressDetailsService.createAddressDetails(addressDetails);
+        	
+        	 
+        	Claims claims = (Claims) request.getAttribute("claims");
+            String userIdString = claims.get("userId", String.class);
+    		Long userId = Long.valueOf(userIdString);
+            if (userId == null) {
+                throw new IllegalArgumentException("User ID cannot be null");
+            }
+            createdAddressDetails = addressDetailsService.createAddressDetails(addressDetails,userId);
             return new ResponseEntity<>(createdAddressDetails, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/list")
-    public @ResponseBody Iterable<AddressDetails> getAllAddressDetails() {
-        return addressDetailsService.getAllAddressDetails();
-    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<AddressDetails> getAddressDetailsById(@PathVariable Long id) {
@@ -103,16 +110,28 @@ public class AddressDetailsController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AddressDetails not found with id: " + id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AddressDetails> updateAddressDetails(@PathVariable Long id, @RequestBody AddressDetails addressDetails) {
-        AddressDetails updatedAddressDetails;
+    
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<AddressDetails>> getAllAddressDetails() {
         try {
-            updatedAddressDetails = addressDetailsService.updateAddressDetails(id, addressDetails);
-            return ResponseEntity.ok(updatedAddressDetails);
+            return new ResponseEntity<>(addressDetailsService.getAllAddressDetails(), HttpStatus.OK);
         } catch (Exception e) {
+            // Handle the exception here
+            // For example, you could log the exception and return an appropriate response
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<AddressDetails> updateAddressDetails(@PathVariable Long id, @RequestBody AddressDetails addressDetails) {
+//        AddressDetails updatedAddressDetails;
+//        try {
+//            updatedAddressDetails = addressDetailsService.updateAddressDetails(id, addressDetails);
+//            return ResponseEntity.ok(updatedAddressDetails);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddressDetails(@PathVariable Long id) {

@@ -2,14 +2,26 @@
 package com.swiftbuy.product.service;
 
 import com.swiftbuy.admin.model.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+
 import com.swiftbuy.admin.repository.CouponCodeRepository;
 import com.swiftbuy.product.repository.ProductRepository;
 import com.swiftbuy.repository.CategoryRepository;
 import com.swiftbuy.subcrepository.SubCategoryRepository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class ProductService {
@@ -160,6 +172,11 @@ public class ProductService {
     public void deleteProductOffer(Long productId) {
         ProductDetails product = getProduct(productId);
         productRepository.delete(product);
+    }
+    
+    @GetMapping("/search")
+    public Page<ProductDetails> searchProductsByName(String searchTerm, Pageable pageable) {
+        return productRepository.findByProductNameContainingIgnoreCase(searchTerm, pageable);
     }
 
    

@@ -10,5 +10,5 @@ import com.swiftbuy.user.model.AccountManangement.AddressDetails;
 @Repository
 public interface AddressDetailsRepo extends CrudRepository<AddressDetails, Long> {
 	List<AddressDetails> findByAddressType(String addressType);
-	List<AddressDetails> findByUserUserId(Long userId);   
+//	List<AddressDetails> findByUserUserId(Long userId);   
 }

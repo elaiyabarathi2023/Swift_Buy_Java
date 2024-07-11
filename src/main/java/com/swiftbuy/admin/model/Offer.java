@@ -3,6 +3,25 @@ package com.swiftbuy.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+
+//Postman Query:
+//	
+//{
+//    "offerName": "Summer Sale",
+//    "offerDescription": "Get discounts on selected items during our summer sale event.",
+//    "discountPercentage": 5.0,
+//    "isActive": true,
+//    // "category": {
+//    //     "categoryid": 1
+//    // },
+//    // "subcategory": {
+//    //     "id": 1
+//    // },
+//    "product": {
+//        "productId": 1
+//    }
+//}
+
 @Entity
 @Table(name = "offer2")
 public class Offer {
@@ -101,9 +120,6 @@ public class Offer {
 	public void setProduct(ProductDetails product) {
 		this.product = product;
 	}
-
-	
-
 
 	
 
